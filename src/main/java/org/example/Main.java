@@ -13,6 +13,8 @@ public class Main {
         String cmd = sc.nextLine();
         System.out.printf("입력된 명령어 : %s\n", cmd);
 
+        System.out.println("소스코드 수정");
+
         sc.close();
 
         System.out.println("== 프로그램 끝 ==");
