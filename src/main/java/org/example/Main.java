@@ -9,12 +9,12 @@ public class Main {
         System.out.println("== 프로그램 시작 ==");
         Scanner sc = new Scanner(System.in);
 
+        // 게시글 번호 변수 만들기
+        int lastArticleId = 0;
+
         while(true) {
             System.out.printf("명령어) ");
             String cmd = sc.nextLine();
-
-            // 게시글 번호 변수 만들기
-            int lastArticleId = 0;
 
             // 양옆에 있는 공백을 없애준다.
             // article list 뒤에 공백을 넣어도 게시물이 없습니다. 라고 출력된다.
