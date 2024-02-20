@@ -13,7 +13,6 @@ public class Main {
 
         List<Article> articles = new ArrayList<>();
 
-
         // 게시글 번호 변수 만들기
         int lastArticleId = 0;
 
@@ -41,7 +40,7 @@ public class Main {
                 }
 
                 System.out.println("번호 | 제목");
-                for(int i = 0; i < articles.size(); i++) {
+                for(int i = articles.size() - 1; i >= 0; i--) {
                     Article article = articles.get(i);
                     System.out.printf("%d | %s\n", article.id, article.title);
                 }
@@ -61,6 +60,37 @@ public class Main {
                 articles.add(article);
 
                 System.out.printf("%d번 글이 작성되었습니다.\n", id);
+            }
+
+            // startsWith는 해당 문자열로 시작하는지 비교하는 메서드 (여기서는 article detail로 시작하냐?)
+            else if(cmd.startsWith("article detail ")) {
+                // 여기서 split은 공백을 기준으로 쪼갠다는 의미
+                String[] cmdBits = cmd.split(" ");
+//                cmdBits[0];     // article
+//                cmdBits[1];     // detail
+                // Integer.parseInt는 "숫자" 를 정수로 바꿔준다.
+                int id = Integer.parseInt(cmdBits[2]);     // 숫자
+
+                Article foundArticle = null;
+
+                for(int i = 0; i < articles.size(); i++) {
+                    Article article = articles.get(i);
+
+                    if(article.id == id) {
+                        foundArticle = article;
+                        break;
+                    }
+                }
+
+                if(foundArticle == null) {
+                    System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+                    continue;
+                }
+
+                System.out.printf("번호 : %d\n", foundArticle.id);
+                System.out.printf("날짜 : %s\n", "2020-12-12 11:11:11");
+                System.out.printf("제목 : %s\n", foundArticle.title);
+                System.out.printf("내용 : %s\n", foundArticle.body);
             }
 
             else {
