@@ -1,6 +1,8 @@
 package org.example;
 
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -8,6 +10,9 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("== 프로그램 시작 ==");
         Scanner sc = new Scanner(System.in);
+
+        List<Article> articles = new ArrayList<>();
+
 
         // 게시글 번호 변수 만들기
         int lastArticleId = 0;
@@ -30,7 +35,16 @@ public class Main {
             }
 
             else if(cmd.equals("article list")) {
-                System.out.println("게시물이 없습니다.");
+                if(articles.size() == 0) {
+                    System.out.println("게시물이 없습니다.");
+                    continue;
+                }
+
+                System.out.println("번호 | 제목");
+                for(int i = 0; i < articles.size(); i++) {
+                    Article article = articles.get(i);
+                    System.out.printf("%d | %s\n", article.id, article.title);
+                }
             }
 
             else if(cmd.equals("article write")) {
@@ -41,6 +55,10 @@ public class Main {
                 String body = sc.nextLine();
 
                 lastArticleId = id;
+
+                Article article = new Article(id, title, body);
+
+                articles.add(article);
 
                 System.out.printf("%d번 글이 작성되었습니다.\n", id);
             }
@@ -53,5 +71,17 @@ public class Main {
         sc.close();
 
         System.out.println("== 프로그램 끝 ==");
+    }
+}
+
+class Article {
+    int id;
+    String title;
+    String body;
+
+    public Article (int id, String title, String body) {
+        this.id = id;
+        this.title = title;
+        this.body = body;
     }
 }
