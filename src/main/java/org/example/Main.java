@@ -1,10 +1,8 @@
 package org.example;
 
-import java.util.Date;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.text.SimpleDateFormat;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -65,6 +63,7 @@ public class Main {
                 System.out.printf("%d번 글이 작성되었습니다.\n", id);
             }
 
+            // ------- 상세보기 -------
             // startsWith는 해당 문자열로 시작하는지 비교하는 메서드 (여기서는 article detail로 시작하냐?)
             else if(cmd.startsWith("article detail ")) {
                 // 여기서 split은 공백을 기준으로 쪼갠다는 의미
@@ -93,12 +92,52 @@ public class Main {
                 }
 
                 System.out.printf("번호 : %d\n", foundArticle.id);
-                System.out.printf("날짜 : %s\n", foundArticle.regDate);
+                System.out.printf("최초등록날짜 : %s\n", foundArticle.regDate);
                 System.out.printf("제목 : %s\n", foundArticle.title);
                 System.out.printf("내용 : %s\n", foundArticle.body);
             }
 
-            // startsWith는 해당 문자열로 시작하는지 비교하는 메서드 (여기서는 article detail로 시작하냐?)
+            // ------- 수정 -------
+            // startsWith는 해당 문자열로 시작하는지 비교하는 메서드 (여기서는 article modify로 시작하냐?)
+            else if(cmd.startsWith("article modify ")) {
+                // 여기서 split은 공백을 기준으로 쪼갠다는 의미
+                String[] cmdBits = cmd.split(" ");
+//                cmdBits[0];     // article
+//                cmdBits[1];     // detail
+                // Integer.parseInt는 "숫자" 를 정수로 바꿔준다.
+                int id = Integer.parseInt(cmdBits[2]);     // 숫자
+
+                // 보고싶은 게시물의 정보를 담아두는 foundArticle 변수 생성
+                Article foundArticle = null;
+
+                for(int i = 0; i < articles.size(); i++) {
+                    Article article = articles.get(i);
+
+                    // article의 id와 입력한 id가 같다면 해당 게시물 정보를 foundArticle에 넣어준다.
+                    if(article.id == id) {
+                        foundArticle = article;
+                        break;
+                    }
+                }
+
+                if(foundArticle == null) {
+                    System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+                    continue;
+                }
+
+                System.out.printf("제목 : ");
+                String title = sc.nextLine();
+                System.out.printf("내용 : ");
+                String body = sc.nextLine();
+
+                foundArticle.title = title;
+                foundArticle.body = body;
+
+                System.out.printf("%d번 게시물이 수정되었습니다.\n", id);
+            }
+
+            // ------- 삭제 -------
+            // startsWith는 해당 문자열로 시작하는지 비교하는 메서드 (여기서는 article delete로 시작하냐?)
             else if(cmd.startsWith("article delete ")) {
                 // 여기서 split은 공백을 기준으로 쪼갠다는 의미
                 String[] cmdBits = cmd.split(" ");
