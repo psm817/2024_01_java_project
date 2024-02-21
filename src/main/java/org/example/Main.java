@@ -93,6 +93,35 @@ public class Main {
                 System.out.printf("내용 : %s\n", foundArticle.body);
             }
 
+            // startsWith는 해당 문자열로 시작하는지 비교하는 메서드 (여기서는 article detail로 시작하냐?)
+            else if(cmd.startsWith("article delete ")) {
+                // 여기서 split은 공백을 기준으로 쪼갠다는 의미
+                String[] cmdBits = cmd.split(" ");
+//                cmdBits[0];     // article
+//                cmdBits[1];     // detail
+                // Integer.parseInt는 "숫자" 를 정수로 바꿔준다.
+                int id = Integer.parseInt(cmdBits[2]);     // 숫자
+
+                int foundIndex = -1;
+
+                for(int i = 0; i < articles.size(); i++) {
+                    Article article = articles.get(i);
+
+                    if(article.id == id) {
+                        foundIndex = i;
+                        break;
+                    }
+                }
+
+                if(foundIndex == -1) {
+                    System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+                    continue;
+                }
+
+                articles.remove(foundIndex);
+                System.out.printf("%d번 게시물이 삭제되었습니다.\n", id);
+            }
+
             else {
                 System.out.printf("%s(은)는 존재하지 않는 명령어입니다.\n", cmd);
             }
