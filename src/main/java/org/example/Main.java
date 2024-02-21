@@ -1,8 +1,10 @@
 package org.example;
 
+import java.util.Date;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.text.SimpleDateFormat;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -54,8 +56,9 @@ public class Main {
                 String body = sc.nextLine();
 
                 lastArticleId = id;
+                String regDate = Util.getNowDateStr();
 
-                Article article = new Article(id, title, body);
+                Article article = new Article(id, regDate, title, body);
 
                 articles.add(article);
 
@@ -71,11 +74,13 @@ public class Main {
                 // Integer.parseInt는 "숫자" 를 정수로 바꿔준다.
                 int id = Integer.parseInt(cmdBits[2]);     // 숫자
 
+                // 보고싶은 게시물의 정보를 담아두는 foundArticle 변수 생성
                 Article foundArticle = null;
 
                 for(int i = 0; i < articles.size(); i++) {
                     Article article = articles.get(i);
 
+                    // article의 id와 입력한 id가 같다면 해당 게시물 정보를 foundArticle에 넣어준다.
                     if(article.id == id) {
                         foundArticle = article;
                         break;
@@ -88,7 +93,7 @@ public class Main {
                 }
 
                 System.out.printf("번호 : %d\n", foundArticle.id);
-                System.out.printf("날짜 : %s\n", "2020-12-12 11:11:11");
+                System.out.printf("날짜 : %s\n", foundArticle.regDate);
                 System.out.printf("제목 : %s\n", foundArticle.title);
                 System.out.printf("내용 : %s\n", foundArticle.body);
             }
@@ -102,11 +107,15 @@ public class Main {
                 // Integer.parseInt는 "숫자" 를 정수로 바꿔준다.
                 int id = Integer.parseInt(cmdBits[2]);     // 숫자
 
+                // 삭제 되었다가 다시 write를 썼을 때 index는 빈 공간부터 넣어지고 id는 계속해서 증가하기 때문에
+                // index를 찾는 변수를 만들어줘야한다.
+                // index가 존재하지 않을 때를 대비하여 기본 변수 값을 -1로 세팅한다.
                 int foundIndex = -1;
 
                 for(int i = 0; i < articles.size(); i++) {
                     Article article = articles.get(i);
 
+                    // article의 id와 입력한 id가 같다면 해당 숫자를 foundIndex에 넣어준다.
                     if(article.id == id) {
                         foundIndex = i;
                         break;
@@ -135,11 +144,13 @@ public class Main {
 
 class Article {
     int id;
+    String regDate;
     String title;
     String body;
 
-    public Article (int id, String title, String body) {
+    public Article (int id, String regDate, String title, String body) {
         this.id = id;
+        this.regDate = regDate;
         this.title = title;
         this.body = body;
     }
