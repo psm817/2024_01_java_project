@@ -7,14 +7,21 @@ import java.util.List;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+    // 모든 메서드에서 접근 가능하도록 articles를 전역변수로 만들어준다.
+    private static List<Article> articles;
+    static {
+        articles = new ArrayList<>();
+    }
     public static void main(String[] args) {
         System.out.println("== 프로그램 시작 ==");
+
+        // 테스트를 위한 데이터 게시물 3개 생성
+        makeTestData();
+
         Scanner sc = new Scanner(System.in);
 
-        List<Article> articles = new ArrayList<>();
-
         // 게시글 번호 변수 만들기
-        int lastArticleId = 0;
+//        int lastArticleId = 0;
 
         while(true) {
             System.out.printf("명령어) ");
@@ -42,18 +49,18 @@ public class Main {
                 System.out.println("번호 | 조회수 | 제목");
                 for(int i = articles.size() - 1; i >= 0; i--) {
                     Article article = articles.get(i);
+                    // %4d는 4칸정도의 공간을 가진다는 뜻으로 위의 출력문 번호 | 와 칸수를 맞추기 위해서 작성
                     System.out.printf("%4d | %4d | %s\n", article.id, article.hit, article.title);
                 }
             }
 
             else if(cmd.equals("article write")) {
-                int id = lastArticleId + 1;
+                int id = articles.size() + 1;
                 System.out.printf("제목 : ");
                 String title = sc.nextLine();
                 System.out.printf("내용 : ");
                 String body = sc.nextLine();
 
-                lastArticleId = id;
                 String regDate = Util.getNowDateStr();
 
                 Article article = new Article(id, regDate, title, body);
@@ -183,6 +190,13 @@ public class Main {
 
         System.out.println("== 프로그램 끝 ==");
     }
+    private static void makeTestData() {
+        System.out.println("테스트를 위한 데이터를 생성합니다.");
+
+        articles.add(new Article(1, Util.getNowDateStr(), "제목1", "내용1", 10));
+        articles.add(new Article(2, Util.getNowDateStr(), "제목2", "내용2", 32));
+        articles.add(new Article(3, Util.getNowDateStr(), "제목3", "내용3", 103));
+    }
 }
 
 class Article {
@@ -192,12 +206,17 @@ class Article {
     String body;
     int hit;
 
-    public Article (int id, String regDate, String title, String body) {
+    // 테스트 데이터는 조회수를 강제로 포함하고싶으면 Article 생성자를 오버로딩한다.
+    public Article (int id, String regDate, String title, String body, int hit) {
         this.id = id;
         this.regDate = regDate;
         this.title = title;
         this.body = body;
-        this.hit = 0;
+        this.hit = hit;
+    }
+    // 복잡하게 쓰는거보다 this 메서드를 이용해서 간단하게 넘겨준다.
+    public Article (int id, String regDate, String title, String body) {
+        this(id, regDate, title, body, 0);
     }
     // 메서드에 privite를 붙히면 외부 클래스에서 사용할 수 없다.
     // 메서드에 public를 붙히면 외내부 전부 사용할 수 있다.
