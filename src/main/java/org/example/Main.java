@@ -39,10 +39,10 @@ public class Main {
                     continue;
                 }
 
-                System.out.println("번호 | 제목");
+                System.out.println("번호 | 조회수 | 제목");
                 for(int i = articles.size() - 1; i >= 0; i--) {
                     Article article = articles.get(i);
-                    System.out.printf("%d | %s\n", article.id, article.title);
+                    System.out.printf("%4d | %4d | %s\n", article.id, article.hit, article.title);
                 }
             }
 
@@ -91,10 +91,14 @@ public class Main {
                     continue;
                 }
 
+                // 조회수 늘리기
+                foundArticle.increaseHit();
+
                 System.out.printf("번호 : %d\n", foundArticle.id);
                 System.out.printf("최초등록날짜 : %s\n", foundArticle.regDate);
                 System.out.printf("제목 : %s\n", foundArticle.title);
                 System.out.printf("내용 : %s\n", foundArticle.body);
+                System.out.printf("조회수 : %d\n", foundArticle.hit);
             }
 
             // ------- 수정 -------
@@ -186,11 +190,18 @@ class Article {
     String regDate;
     String title;
     String body;
+    int hit;
 
     public Article (int id, String regDate, String title, String body) {
         this.id = id;
         this.regDate = regDate;
         this.title = title;
         this.body = body;
+        this.hit = 0;
+    }
+    // 메서드에 privite를 붙히면 외부 클래스에서 사용할 수 없다.
+    // 메서드에 public를 붙히면 외내부 전부 사용할 수 있다.
+    public void increaseHit() {
+        hit++;
     }
 }
