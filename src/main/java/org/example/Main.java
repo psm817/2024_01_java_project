@@ -80,18 +80,8 @@ public class Main {
                 // Integer.parseInt는 "숫자" 를 정수로 바꿔준다.
                 int id = Integer.parseInt(cmdBits[2]);     // 숫자
 
-                // 보고싶은 게시물의 정보를 담아두는 foundArticle 변수 생성
-                Article foundArticle = null;
-
-                for(int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
-
-                    // article의 id와 입력한 id가 같다면 해당 게시물 정보를 foundArticle에 넣어준다.
-                    if(article.id == id) {
-                        foundArticle = article;
-                        break;
-                    }
-                }
+                // getArticleById 메서드를 통해 id를 준다.
+                Article foundArticle = getArticleById(id);
 
                 if(foundArticle == null) {
                     System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
@@ -118,18 +108,8 @@ public class Main {
                 // Integer.parseInt는 "숫자" 를 정수로 바꿔준다.
                 int id = Integer.parseInt(cmdBits[2]);     // 숫자
 
-                // 보고싶은 게시물의 정보를 담아두는 foundArticle 변수 생성
-                Article foundArticle = null;
-
-                for(int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
-
-                    // article의 id와 입력한 id가 같다면 해당 게시물 정보를 foundArticle에 넣어준다.
-                    if(article.id == id) {
-                        foundArticle = article;
-                        break;
-                    }
-                }
+                // getArticleById 메서드를 통해 id를 준다.
+                Article foundArticle = getArticleById(id);
 
                 if(foundArticle == null) {
                     System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
@@ -160,17 +140,7 @@ public class Main {
                 // 삭제 되었다가 다시 write를 썼을 때 index는 빈 공간부터 넣어지고 id는 계속해서 증가하기 때문에
                 // index를 찾는 변수를 만들어줘야한다.
                 // index가 존재하지 않을 때를 대비하여 기본 변수 값을 -1로 세팅한다.
-                int foundIndex = -1;
-
-                for(int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
-
-                    // article의 id와 입력한 id가 같다면 해당 숫자를 foundIndex에 넣어준다.
-                    if(article.id == id) {
-                        foundIndex = i;
-                        break;
-                    }
-                }
+                int foundIndex = getArticleIndexById(id);
 
                 if(foundIndex == -1) {
                     System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
@@ -190,6 +160,29 @@ public class Main {
 
         System.out.println("== 프로그램 끝 ==");
     }
+
+    private static int getArticleIndexById(int id) {
+        int i = 0;
+        for(Article article : articles) {
+            if(article.id == id) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
+    // 공통된 기능을 하나의 메서드로 집합
+    private static Article getArticleById(int id) {
+        int index = getArticleIndexById(id);
+
+        if(index != -1) {
+            return articles.get(index);
+        }
+
+        return null;
+    }
+
     private static void makeTestData() {
         System.out.println("테스트를 위한 데이터를 생성합니다.");
 
