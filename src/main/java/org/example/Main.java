@@ -40,15 +40,37 @@ public class Main {
                 break;
             }
 
-            else if(cmd.equals("article list")) {
+            else if(cmd.startsWith("article list")) {
                 if(articles.size() == 0) {
                     System.out.println("게시물이 없습니다.");
                     continue;
                 }
 
+                String searchKeyword = cmd.substring("article list".length()).trim();
+
+                // articles와 연결된 forListArticles
+                List<Article> forListArticles = articles;
+
+                // 검색어를 담은 리스트를 새로 생성
+                if(searchKeyword.length() > 0) {
+                    forListArticles = new ArrayList<>();
+
+                    // 반복문을 통해 제목에 검색어가 있다면 리스트에 저장
+                    for(Article article : articles) {
+                        if(article.title.contains(searchKeyword)) {
+                            forListArticles.add(article);
+                        }
+                    }
+                }
+
+                if (forListArticles.size() == 0) {
+                    System.out.println("검색결과가 존재하지 않습니다.");
+                    continue;
+                }
+
                 System.out.println("번호 | 조회수 | 제목");
-                for(int i = articles.size() - 1; i >= 0; i--) {
-                    Article article = articles.get(i);
+                for(int i = forListArticles.size() - 1; i >= 0; i--) {
+                    Article article = forListArticles.get(i);
                     // %4d는 4칸정도의 공간을 가진다는 뜻으로 위의 출력문 번호 | 와 칸수를 맞추기 위해서 작성
                     System.out.printf("%4d | %4d | %s\n", article.id, article.hit, article.title);
                 }
