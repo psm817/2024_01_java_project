@@ -1,5 +1,9 @@
 package org.example;
 
+import org.example.dto.Article;
+import org.example.dto.Member;
+import org.example.util.Util;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +13,11 @@ import java.util.List;
 public class Main {
     // 모든 메서드에서 접근 가능하도록 articles를 전역변수로 만들어준다.
     private static List<Article> articles;
+    private static List<Member> members;
+
     static {
         articles = new ArrayList<>();
+        members = new ArrayList<>();
     }
     public static void main(String[] args) {
         System.out.println("== 프로그램 시작 ==");
@@ -38,6 +45,68 @@ public class Main {
 
             if(cmd.equals("system exit")) {
                 break;
+            }
+
+            else if(cmd.equals("member join")) {
+                int id = members.size() + 1;
+
+                String regDate = Util.getNowDateStr();
+
+                String loginId = null;
+                String loginPw = null;
+                String loginPwConfirm = null;
+
+                while(true) {
+                    System.out.printf("로그인 아이디 : ");
+                    loginId = sc.nextLine();
+
+                    if(isJoinableLoginId(loginId) == false) {
+                        System.out.printf("%s(은)는 이미 사용중인 아이디 입니다.\n", loginId);
+                        continue;
+                    }
+                    break;
+                }
+
+                while(true) {
+                    System.out.printf("로그인 비번 : ");
+                    loginPw = sc.nextLine();
+
+                    System.out.printf("로그인 비번확인 : ");
+                    loginPwConfirm = sc.nextLine();
+
+                    if(loginPw.equals(loginPwConfirm) == false) {
+                        System.out.println("비밀번호를 다시 입력해주세요.");
+                        continue;
+                    }
+                    break;
+                }
+
+                System.out.printf("이름 : ");
+                String name = sc.nextLine();
+
+                Member member = new Member(id, regDate, loginId, loginPw, name);
+
+                members.add(member);
+
+                System.out.printf("%d번 회원이 생성되었습니다.\n", id);
+            }
+
+            else if(cmd.equals("article write")) {
+                int id = articles.size() + 1;
+
+                System.out.printf("제목 : ");
+                String title = sc.nextLine();
+
+                System.out.printf("내용 : ");
+                String body = sc.nextLine();
+
+                String regDate = Util.getNowDateStr();
+
+                Article article = new Article(id, regDate, title, body);
+
+                articles.add(article);
+
+                System.out.printf("%d번 글이 작성되었습니다.\n", id);
             }
 
             else if(cmd.startsWith("article list")) {
@@ -74,22 +143,6 @@ public class Main {
                     // %4d는 4칸정도의 공간을 가진다는 뜻으로 위의 출력문 번호 | 와 칸수를 맞추기 위해서 작성
                     System.out.printf("%4d | %4d | %s\n", article.id, article.hit, article.title);
                 }
-            }
-
-            else if(cmd.equals("article write")) {
-                int id = articles.size() + 1;
-                System.out.printf("제목 : ");
-                String title = sc.nextLine();
-                System.out.printf("내용 : ");
-                String body = sc.nextLine();
-
-                String regDate = Util.getNowDateStr();
-
-                Article article = new Article(id, regDate, title, body);
-
-                articles.add(article);
-
-                System.out.printf("%d번 글이 작성되었습니다.\n", id);
             }
 
             // ------- 상세보기 -------
@@ -183,6 +236,27 @@ public class Main {
         System.out.println("== 프로그램 끝 ==");
     }
 
+    private static boolean isJoinableLoginId(String loginId) {
+        int index = getMemberIndexByLoginId(loginId);
+
+        if(index == -1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static int getMemberIndexByLoginId(String loginId) {
+        int i = 0;
+        for(Member member : members) {
+            if(member.loginId.equals(loginId)) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
     private static int getArticleIndexById(int id) {
         int i = 0;
         for(Article article : articles) {
@@ -214,28 +288,3 @@ public class Main {
     }
 }
 
-class Article {
-    int id;
-    String regDate;
-    String title;
-    String body;
-    int hit;
-
-    // 테스트 데이터는 조회수를 강제로 포함하고싶으면 Article 생성자를 오버로딩한다.
-    public Article (int id, String regDate, String title, String body, int hit) {
-        this.id = id;
-        this.regDate = regDate;
-        this.title = title;
-        this.body = body;
-        this.hit = hit;
-    }
-    // 복잡하게 쓰는거보다 this 메서드를 이용해서 간단하게 넘겨준다.
-    public Article (int id, String regDate, String title, String body) {
-        this(id, regDate, title, body, 0);
-    }
-    // 메서드에 privite를 붙히면 외부 클래스에서 사용할 수 없다.
-    // 메서드에 public를 붙히면 외내부 전부 사용할 수 있다.
-    public void increaseHit() {
-        hit++;
-    }
-}
