@@ -1,9 +1,7 @@
 package org.example.dto;
 
 // public을 붙혀야 Main에서 불러왔을 때 오류가 안난다.
-public class Member {
-    public int id;
-    public String regDate;
+public class Member extends Dto {
     public String loginId;
     public String loginPw;
     public String name;
