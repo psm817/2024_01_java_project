@@ -6,7 +6,7 @@ public class Member extends Dto {
     public String loginPw;
     public String name;
 
-    // 테스트 데이터는 조회수를 강제로 포함하고싶으면 Article 생성자를 오버로딩한다.
+    // 테스트 데이터는 조회수를 강제로 포함하고싶으면 Member 생성자를 오버로딩한다.
     public Member(int id, String regDate, String loginId, String loginPw, String name) {
         this.id = id;
         this.regDate = regDate;

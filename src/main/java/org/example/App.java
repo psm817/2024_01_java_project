@@ -24,6 +24,7 @@ public class App {
 
         // 테스트를 위한 데이터 게시물 3개 생성
         articleController.makeTestData();
+        memberController.makeTestData();
 
         while(true) {
             System.out.printf("명령어) ");
