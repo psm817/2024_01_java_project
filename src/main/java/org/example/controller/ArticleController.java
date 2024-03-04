@@ -14,9 +14,17 @@ public class ArticleController extends Controller{
     private String cmd;
     private String actionMethodName;
 
-    public ArticleController(Scanner sc, List<Article> articles) {
+    public ArticleController(Scanner sc) {
         this.sc = sc;
-        this.articles = articles;
+        articles = new ArrayList<Article>();
+    }
+
+    public void makeTestData() {
+        System.out.println("테스트를 위한 데이터를 생성합니다.");
+
+        articles.add(new Article(1, Util.getNowDateStr(), "제목1", "내용1", 10));
+        articles.add(new Article(2, Util.getNowDateStr(), "제목2", "내용2", 32));
+        articles.add(new Article(3, Util.getNowDateStr(), "제목3", "내용3", 103));
     }
 
     public void doAction(String cmd, String actionMethodName) {
@@ -105,6 +113,13 @@ public class ArticleController extends Controller{
         String[] cmdBits = cmd.split(" ");
 //                cmdBits[0];     // article
 //                cmdBits[1];     // detail
+
+        // cmdBits에서 숫자를 입력안했을 때 디버깅 (article detail까지만 명령어를 입력했을 때)
+        if(cmdBits.length <= 2) {
+            System.out.println("게시물 번호를 입력해주세요");
+            return;
+        }
+
         // Integer.parseInt는 "숫자" 를 정수로 바꿔준다.
         int id = Integer.parseInt(cmdBits[2]);     // 숫자
 
@@ -131,6 +146,13 @@ public class ArticleController extends Controller{
         String[] cmdBits = cmd.split(" ");
 //                cmdBits[0];     // article
 //                cmdBits[1];     // detail
+
+        // cmdBits에서 숫자를 입력안했을 때 디버깅 (article modify까지만 명령어를 입력했을 때)
+        if(cmdBits.length <= 2) {
+            System.out.println("게시물 번호를 입력해주세요");
+            return;
+        }
+
         // Integer.parseInt는 "숫자" 를 정수로 바꿔준다.
         int id = Integer.parseInt(cmdBits[2]);     // 숫자
 
@@ -158,6 +180,13 @@ public class ArticleController extends Controller{
         String[] cmdBits = cmd.split(" ");
 //                cmdBits[0];     // article
 //                cmdBits[1];     // detail
+
+        // cmdBits에서 숫자를 입력안했을 때 디버깅 (article delete까지만 명령어를 입력했을 때)
+        if(cmdBits.length <= 2) {
+            System.out.println("게시물 번호를 입력해주세요");
+            return;
+        }
+
         // Integer.parseInt는 "숫자" 를 정수로 바꿔준다.
         int id = Integer.parseInt(cmdBits[2]);     // 숫자
 
