@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.controller.ArticleController;
+import org.example.controller.Controller;
 import org.example.controller.MemberController;
 import org.example.dto.Article;
 import org.example.dto.Member;
@@ -52,39 +53,32 @@ public class App {
                 break;
             }
 
-            else if(cmd.equals("member join")) {
-                memberController.doJoin();
+            // 여기서 split은 공백을 기준으로 쪼갠다는 의미
+            String[] cmdBits = cmd.split(" ");      // article xxx xxx
+
+            if(cmdBits.length == 1) {
+                System.out.printf("%s(은)는 존재하지 않는 명령어입니다.\n", cmd);
+                continue;
+            }
+            String controllerName = cmdBits[0];             // 0번째 article이나 member을 뽑아냄
+            String actionMethodName = cmdBits[1];           // 1번째 각 명령어를 뽑아냄 (join, write, detail, modify, list, delete)
+
+            Controller controller = null;
+
+            if(controllerName.equals("article")) {
+                controller = articleController;
             }
 
-            else if(cmd.equals("article write")) {
-               articleController.doWrite();
-            }
-
-            else if(cmd.startsWith("article list")) {
-                articleController.showList(cmd);
-            }
-
-            // ------- 상세보기 -------
-            // startsWith는 해당 문자열로 시작하는지 비교하는 메서드 (여기서는 article detail로 시작하냐?)
-            else if(cmd.startsWith("article detail ")) {
-                articleController.showDetail(cmd);
-            }
-
-            // ------- 수정 -------
-            // startsWith는 해당 문자열로 시작하는지 비교하는 메서드 (여기서는 article modify로 시작하냐?)
-            else if(cmd.startsWith("article modify ")) {
-                articleController.doModify(cmd);
-            }
-
-            // ------- 삭제 -------
-            // startsWith는 해당 문자열로 시작하는지 비교하는 메서드 (여기서는 article delete로 시작하냐?)
-            else if(cmd.startsWith("article delete ")) {
-                articleController.doDelete(cmd);
+            else if(controllerName.equals("member")) {
+                controller = memberController;
             }
 
             else {
                 System.out.printf("%s(은)는 존재하지 않는 명령어입니다.\n", cmd);
+                continue;
             }
+
+            controller.doAction(cmd, actionMethodName);
         }
 
         sc.close();

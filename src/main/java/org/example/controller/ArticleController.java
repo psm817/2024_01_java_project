@@ -8,13 +8,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ArticleController {
+public class ArticleController extends Controller{
     private Scanner sc;
     private List<Article> articles;
+    private String cmd;
+    private String actionMethodName;
+
     public ArticleController(Scanner sc, List<Article> articles) {
         this.sc = sc;
         this.articles = articles;
     }
+
+    public void doAction(String cmd, String actionMethodName) {
+        this.cmd = cmd;
+        this.actionMethodName = actionMethodName;
+
+        switch(actionMethodName) {
+            case "write":
+                doWrite();
+                break;
+            case "list":
+                showList();
+                break;
+            case "detail":
+                showDetail();
+                break;
+            case "modify":
+                doModify();
+                break;
+            case "delete":
+                doDelete();
+                break;
+            default:
+                System.out.printf("%s(은)는 존재하지 않는 명령어입니다.\n", cmd);
+                break;
+        }
+    }
+
     public void doWrite() {
         int id = articles.size() + 1;
 
@@ -33,7 +63,7 @@ public class ArticleController {
         System.out.printf("%d번 글이 작성되었습니다.\n", id);
     }
 
-    public void showList(String cmd) {
+    public void showList() {
         if(articles.size() == 0) {
             System.out.println("게시물이 없습니다.");
             // void 여도 반환 타입없이 return만 쓰면 해당 메서드를 끝내겠다는 뜻이고 continue와 같은 역할이다.
@@ -70,7 +100,7 @@ public class ArticleController {
         }
     }
 
-    public void showDetail(String cmd) {
+    public void showDetail() {
         // 여기서 split은 공백을 기준으로 쪼갠다는 의미
         String[] cmdBits = cmd.split(" ");
 //                cmdBits[0];     // article
@@ -96,7 +126,7 @@ public class ArticleController {
         System.out.printf("조회수 : %d\n", foundArticle.hit);
     }
 
-    public void doModify(String cmd) {
+    public void doModify() {
         // 여기서 split은 공백을 기준으로 쪼갠다는 의미
         String[] cmdBits = cmd.split(" ");
 //                cmdBits[0];     // article
@@ -123,7 +153,7 @@ public class ArticleController {
         System.out.printf("%d번 게시물이 수정되었습니다.\n", id);
     }
 
-    public void doDelete(String cmd) {
+    public void doDelete() {
         // 여기서 split은 공백을 기준으로 쪼갠다는 의미
         String[] cmdBits = cmd.split(" ");
 //                cmdBits[0];     // article
