@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.container.Container;
 import org.example.dto.Article;
 import org.example.dto.Member;
 import org.example.util.Util;
@@ -16,15 +17,17 @@ public class ArticleController extends Controller{
 
     public ArticleController(Scanner sc) {
         this.sc = sc;
-        articles = new ArrayList<Article>();
+
+        // Container를 통해 접근한다.
+        articles = Container.articleDao.articles;
     }
 
     public void makeTestData() {
         System.out.println("테스트를 위한 게시물 데이터를 생성합니다.");
 
-        articles.add(new Article(1, Util.getNowDateStr(), "제목1", "내용1", 10));
-        articles.add(new Article(2, Util.getNowDateStr(), "제목2", "내용2", 32));
-        articles.add(new Article(3, Util.getNowDateStr(), "제목3", "내용3", 103));
+        articles.add(new Article(1, Util.getNowDateStr(), 1, "제목1", "내용1", 10));
+        articles.add(new Article(2, Util.getNowDateStr(), 2, "제목2", "내용2", 32));
+        articles.add(new Article(3, Util.getNowDateStr(), 2, "제목3", "내용3", 103));
     }
 
     public void doAction(String cmd, String actionMethodName) {
@@ -64,7 +67,7 @@ public class ArticleController extends Controller{
 
         String regDate = Util.getNowDateStr();
 
-        Article article = new Article(id, regDate, title, body);
+        Article article = new Article(id, regDate, 1, title, body);
 
         articles.add(article);
 
@@ -100,11 +103,25 @@ public class ArticleController extends Controller{
             return;
         }
 
-        System.out.println("번호 | 조회수 | 제목");
+        System.out.println("번호 |    작성자 | 조회수 | 제목");
+
         for(int i = forListArticles.size() - 1; i >= 0; i--) {
             Article article = forListArticles.get(i);
+
+            String writerName = null;
+
+            List<Member> members = Container.memberDao.members;
+
+            // 컨테이너에 들어간 멤버를 반복문을 통해 id 비교를 해서 작성자 저장
+            for(Member member : members) {
+                if(article.memberId == member.id) {
+                    writerName = member.name;
+                    break;
+                }
+            }
+
             // %4d는 4칸정도의 공간을 가진다는 뜻으로 위의 출력문 번호 | 와 칸수를 맞추기 위해서 작성
-            System.out.printf("%4d | %4d | %s\n", article.id, article.hit, article.title);
+            System.out.printf("%4d | %6s | %6d | %s\n", article.id, writerName, article.hit, article.title);
         }
     }
 
